@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const MaskContainer = styled.div`
@@ -10,9 +10,9 @@ const MaskContainer = styled.div`
 
 const MaskText = styled.h3`
   position: absolute;
-  top: 330px;
+  top: 256px;
   left: 0;
-  color: #f40;
+  color: ${(props) => (props.isMask ? "#f40" : "#007AFF")};
   font-family: Pretendard;
   font-size: 25px;
   font-style: normal;
@@ -22,7 +22,7 @@ const MaskText = styled.h3`
 
 const MaskAlarm = styled.h3`
   position: absolute;
-  top: 382px;
+  top: 316px;
   left: 0;
   border-radius: 18px;
   border: 1px solid #f40;
@@ -34,7 +34,7 @@ const MaskAlarm = styled.h3`
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.2; /* 15.6px */
+  line-height: 1.2;
   letter-spacing: 0.13px;
   cursor: pointer;
 
@@ -46,19 +46,55 @@ const MaskAlarm = styled.h3`
 
 const MaskIcon = styled.img`
   position: absolute;
-  top: 383px; /* 위치값 수정.. 해야함 */
+  top: 331px;
   left: 193px;
   width: 114px;
   height: 114px;
   flex-shrink: 0;
 `;
 
-const Mask = () => {
+const IsMaskIcon = styled.img`
+  position: absolute;
+  top: 343px;
+  left: 185px;
+  width: 59px;
+  height: 50px;
+  flex-shrink: 0;
+`;
+
+const NoMaskIcon = styled.img`
+  position: absolute;
+  top: 331px;
+  left: 193px;
+  width: 114px;
+  height: 114px;
+  flex-shrink: 0;
+`;
+
+const Mask = ({ alert, isMask }) => {
   return (
     <MaskContainer>
-      <MaskText>마스크를 꼭 착용하세요</MaskText>
-      <MaskAlarm>미세먼지 경보</MaskAlarm>
-      <MaskIcon src={require("../assets/images/mask.png")} alt="Mask icon" />
+      <MaskText isMask={isMask}>
+        {isMask ? "마스크를 꼭 착용하세요" : "마스크는 필요없어요"}
+      </MaskText>
+      {alert && <MaskAlarm>미세먼지 경보</MaskAlarm>}
+      {isMask ? (
+        <>
+          <MaskIcon
+            src={require("../assets/images/mask.png")}
+            alt="Mask icon"
+          />
+          <IsMaskIcon
+            src={require("../assets/images/ismask.png")}
+            alt="Is Mask icon"
+          />
+        </>
+      ) : (
+        <NoMaskIcon
+          src={require("../assets/images/nomask.png")}
+          alt="No Mask icon"
+        />
+      )}
     </MaskContainer>
   );
 };
