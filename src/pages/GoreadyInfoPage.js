@@ -7,6 +7,7 @@ import RainProbability from "../components/RainProbability";
 import { useLocationInfo } from "../context/GeoInfoContext";
 import { axiosInstance } from "../apis/axiosInstance";
 import { SyncLoader } from "react-spinners";
+import { useGeoLocation } from "../hooks/useGeoLocation";
 
 const MainPageContainer = styled.div`
   position: relative;
@@ -45,6 +46,26 @@ const GoreadyInfoPage = () => {
   const { geoLocation, updateLocation } = useLocationInfo();
   const [weatherInfo, setWeatherInfo] = useState("");
   const [maskInfo, setMaskInfo] = useState("");
+  const [isLocationLoaded, setIsLocationLoaded] = useState(false);
+  const { location, getLocation } = useGeoLocation();
+
+  useEffect(() => {
+    if (location && location.latitude && location.longitude) {
+      updateLocation(location.latitude, location.longitude);
+      setIsLocationLoaded(true);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    const storedLatitude = localStorage.getItem("latitude");
+    const storedLongitude = localStorage.getItem("longitude");
+
+    if (storedLatitude && storedLongitude) {
+      updateLocation(parseFloat(storedLatitude), parseFloat(storedLongitude));
+    }
+
+    getLocation();
+  }, []);
 
   const fetchWeatherData = async () => {
     if (geoLocation.latitude != null && geoLocation.longitude != null) {
@@ -75,19 +96,13 @@ const GoreadyInfoPage = () => {
   };
 
   useEffect(() => {
-    const storedLatitude = localStorage.getItem("latitude");
-    const storedLongitude = localStorage.getItem("longitude");
-    if (storedLatitude && storedLongitude) {
-      updateLocation(parseFloat(storedLatitude), parseFloat(storedLongitude));
+    if (isLocationLoaded) {
+      fetchWeatherData();
+      fetchMaskData();
     }
-  }, []);
-
-  useEffect(() => {
-    fetchWeatherData();
-    fetchMaskData();
   }, [geoLocation]);
 
-  if (!weatherInfo || !maskInfo)
+  if (!isLocationLoaded || !weatherInfo || !maskInfo)
     return (
       <Loading>
         Loading...
@@ -99,10 +114,10 @@ const GoreadyInfoPage = () => {
     <MainPageContainer>
       <StyledLogo />
       <Temperature weatherInfo={weatherInfo} currLocation={maskInfo.address} />
-      <Mask alert={maskInfo.alert} isMask={maskInfo.isMask} />
+      <Mask alert={maskInfo.alert} mask={maskInfo.mask} />
       <RainProbability
         rainPer={weatherInfo.rainPer}
-        isUmbrella={weatherInfo.isUmbrella}
+        umbrella={weatherInfo.umbrella}
       />
       <Divider top={251} />
       <Divider top={470} />

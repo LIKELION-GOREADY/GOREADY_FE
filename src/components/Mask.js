@@ -12,7 +12,7 @@ const MaskText = styled.h3`
   position: absolute;
   top: 256px;
   left: 0;
-  color: ${(props) => (props.isMask ? "#f40" : "#007AFF")};
+  color: ${(props) => (props.mask ? "#f40" : "#007AFF")};
   font-family: Pretendard;
   font-size: 25px;
   font-style: normal;
@@ -37,8 +37,6 @@ const MaskAlarm = styled.h3`
   line-height: 1.2;
   letter-spacing: 0.13px;
   cursor: pointer;
-
-  /* 중앙에 텍스트 정렬 */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -71,14 +69,14 @@ const NoMaskIcon = styled.img`
   flex-shrink: 0;
 `;
 
-const Mask = ({ alert, isMask }) => {
+const Mask = ({ alert, mask }) => {
   return (
     <MaskContainer>
-      <MaskText isMask={isMask}>
-        {isMask ? "마스크를 꼭 착용하세요" : "마스크는 필요없어요"}
+      <MaskText mask={mask}>
+        {mask ? "마스크를 꼭 착용하세요" : "마스크는 필요없어요"}
       </MaskText>
       {alert && <MaskAlarm>미세먼지 경보</MaskAlarm>}
-      {isMask ? (
+      {mask ? (
         <>
           <MaskIcon
             src={require("../assets/images/mask.png")}
