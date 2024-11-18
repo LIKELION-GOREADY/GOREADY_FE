@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ReactComponent as GoReadyLogo } from "../assets/images/goReadyLogo.svg";
 import Temperature from "../components/Temperature";
 import Mask from "../components/Mask";
 import RainProbability from "../components/RainProbability";
@@ -10,36 +9,31 @@ import { SyncLoader } from "react-spinners";
 import { useGeoLocation } from "../hooks/useGeoLocation";
 
 const MainPageContainer = styled.div`
+  display: flex;
   position: relative;
+  flex-direction: column;
   justify-content: center;
   width: 393px;
-  height: 852px;
-  background-color: #fafafa;
 `;
 
 const Divider = styled.div`
-  position: absolute;
-  top: ${(props) => props.top}px;
-  left: 11px;
+  position: relative;
+  margin-top: ${(props) => props.marginTop}px;
   width: 100%;
   height: 1px;
   background-color: #ebedf0;
 `;
 
-const StyledLogo = styled(GoReadyLogo)`
-  position: absolute;
-  top: 33px;
-  left: 264px;
-  width: 70.2px;
-  height: 30px;
-`;
-
 const Loading = styled.div`
-  position: absolute;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute; /* 부모 컨테이너의 위치 기준 */
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%); /* 완전 중앙으로 이동 */
+  font-family: "Pretendard";
 `;
 
 const GoreadyInfoPage = () => {
@@ -112,15 +106,14 @@ const GoreadyInfoPage = () => {
 
   return (
     <MainPageContainer>
-      <StyledLogo />
       <Temperature weatherInfo={weatherInfo} currLocation={maskInfo.address} />
+      <Divider marginTop={49} />
       <Mask alert={maskInfo.alert} mask={maskInfo.mask} />
+      <Divider marginTop={27} />
       <RainProbability
         rainPer={weatherInfo.rainPer}
         umbrella={weatherInfo.umbrella}
       />
-      <Divider top={251} />
-      <Divider top={470} />
     </MainPageContainer>
   );
 };

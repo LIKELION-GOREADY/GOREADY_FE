@@ -83,6 +83,7 @@ const Loading = styled.div`
   align-items: center;
   flex-direction: column;
   height: 100vh;
+  font-family: "Pretendard";
 `;
 
 const Container = styled.div`
@@ -117,4 +118,5 @@ const TextContainer = styled.div`
   flex-direction: column;
   margin-top: 81px;
   gap: 10px;
+  font-family: "Pretendard";
 `;
